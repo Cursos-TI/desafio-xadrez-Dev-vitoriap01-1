@@ -2,135 +2,168 @@
 
 #define TAM 8
 
-// desenho do tabuleiro
+// ================= TABULEIRO =================
 void desenharTabuleiro(int linha, int coluna, char peca) {
-
     for(int i = 0; i < TAM; i++) {
         for(int j = 0; j < TAM; j++) {
 
-            if(i == linha && j == coluna) {
+            if(i == linha && j == coluna)
                 printf("%c ", peca);
-            } else {
+            else
                 printf(". ");
-            }
-
         }
         printf("\n");
     }
 }
 
-int main() {
+// ================= TORRE (recursivo) =================
+// Move para a direita
+void moverTorre(int casas, int *linha, int *coluna) {
+    if(casas <= 0) return;
 
-    int opcao;
-    int linha = 0, coluna = 0; // posição inicial
-    char peca = 'P';
-
-    do {
-        printf("\n=== MINI XADREZ 8x8 ===\n");
-        printf("1 - Torre\n");
-        printf("2 - Bispo\n");
-        printf("3 - Rainha\n");
-        printf("4 - Cavalo\n");
-        printf("5 - Sair\n");
-
-        printf("Escolha a peça: ");
-        scanf("%d", &opcao);
-
+    if(*coluna < TAM - 1) {
+        (*coluna)++;
+        printf("Direita\n");
+        desenharTabuleiro(*linha, *coluna, 'T');
         printf("\n");
+    }
 
-        switch(opcao) {
+    moverTorre(casas - 1, linha, coluna);
+}
 
-            // ================= TORRE =================
-            case 1:
-                peca = 'T';
-                printf("Movendo Torre...\n");
+// ================= RAINHA (recursivo) =================
+// Move para a esquerda
+void moverRainha(int casas, int *linha, int *coluna) {
+    if(casas <= 0) return;
 
-                for(int i = 0; i < 3; i++) {
-                    if(coluna < TAM - 1) {
-                        coluna++;
-                        printf("Direita\n");
-                        desenharTabuleiro(linha, coluna, peca);
-                        printf("\n");
-                    }
-                }
-                break;
+    if(*coluna > 0) {
+        (*coluna)--;
+        printf("Esquerda\n");
+        desenharTabuleiro(*linha, *coluna, 'R');
+        printf("\n");
+    }
 
-            // ================= BISPO =================
-            case 2:
-                peca = 'B';
-                printf("Movendo Bispo...\n");
+    moverRainha(casas - 1, linha, coluna);
+}
 
-                int i = 0;
-                while(i < 3) {
-                    if(linha > 0 && coluna < TAM - 1) {
-                        linha--;
-                        coluna++;
-                        printf("Diagonal (Cima + Direita)\n");
-                        desenharTabuleiro(linha, coluna, peca);
-                        printf("\n");
-                    }
-                    i++;
-                }
-                break;
+// ================= BISPO (recursivo + loops aninhados) =================
+// Diagonal: cima + direita
+void moverBispo(int casas, int *linha, int *coluna) {
+    if(casas <= 0) return;
 
-            // ================= RAINHA =================
-            case 3:
-                peca = 'R';
-                printf("Movendo Rainha...\n");
+    // loop externo (vertical)
+    for(int i = 0; i < 1; i++) {
 
-                for(int k = 0; k < 3; k++) {
-                    if(coluna > 0) {
-                        coluna--;
-                        printf("Esquerda\n");
-                        desenharTabuleiro(linha, coluna, peca);
-                        printf("\n");
-                    }
-                }
-                break;
-
-            // ================= CAVALO =================
-            case 4:
-                peca = 'C';
-                printf("Movendo Cavalo...\n");
-
-                int passosBaixo = 2;
-                int passosEsquerda = 1;
-
-                for(int x = 0; x < passosBaixo; x++) {
-
-                    if(linha < TAM - 1) {
-                        linha++;
-                        printf("Baixo\n");
-                        desenharTabuleiro(linha, coluna, peca);
-                        printf("\n");
-                    }
-
-                    // loop aninhado
-                    if(x == passosBaixo - 1) {
-                        int y = 0;
-
-                        while(y < passosEsquerda) {
-                            if(coluna > 0) {
-                                coluna--;
-                                printf("Esquerda\n");
-                                desenharTabuleiro(linha, coluna, peca);
-                                printf("\n");
-                            }
-                            y++;
-                        }
-                    }
-                }
-                break;
-
-            case 5:
-                printf("Saindo...\n");
-                break;
-
-            default:
-                printf("Opcao invalida!\n");
+        if(*linha > 0) {
+            (*linha)--;
+            printf("Cima\n");
         }
 
-    } while(opcao != 5);
+        // loop interno (horizontal)
+        for(int j = 0; j < 1; j++) {
+            if(*coluna < TAM - 1) {
+                (*coluna)++;
+                printf("Direita\n");
+            }
+        }
+
+        desenharTabuleiro(*linha, *coluna, 'B');
+        printf("\n");
+    }
+
+    moverBispo(casas - 1, linha, coluna);
+}
+
+// ================= CAVALO (loops complexos) =================
+// Movimento: 2 cima + 1 direita
+void moverCavalo(int *linha, int *coluna) {
+
+    int movVertical = 2;
+    int movHorizontal = 1;
+
+    for(int i = 0; i < movVertical; i++) {
+
+        if(i < 0) continue; // exemplo de uso
+
+        if(*linha > 0) {
+            (*linha)--;
+            printf("Cima\n");
+            desenharTabuleiro(*linha, *coluna, 'C');
+            printf("\n");
+        }
+
+        // último passo vertical → faz o horizontal
+        if(i == movVertical - 1) {
+
+            for(int j = 0; j < movHorizontal; j++) {
+
+                if(j > 1) break; // exemplo de uso
+
+                if(*coluna < TAM - 1) {
+                    (*coluna)++;
+                    printf("Direita\n");
+                    desenharTabuleiro(*linha, *coluna, 'C');
+                    printf("\n");
+                }
+            }
+        }
+    }
+}
+
+// ================= MAIN =================
+int main() {
+
+    int casas = 3;
+
+    // posição inicial (centro do tabuleiro)
+    int linha = 4;
+    int coluna = 4;
+
+    // TORRE
+    printf("Movimento da Torre:\n\n");
+    desenharTabuleiro(linha, coluna, 'T');
+    printf("\n");
+
+    moverTorre(casas, &linha, &coluna);
+
+    printf("\n");
+
+    // reset posição
+    linha = 4;
+    coluna = 4;
+
+    // BISPO
+    printf("Movimento do Bispo:\n\n");
+    desenharTabuleiro(linha, coluna, 'B');
+    printf("\n");
+
+    moverBispo(casas, &linha, &coluna);
+
+    printf("\n");
+
+    // reset posição
+    linha = 4;
+    coluna = 4;
+
+    // RAINHA
+    printf("Movimento da Rainha:\n\n");
+    desenharTabuleiro(linha, coluna, 'R');
+    printf("\n");
+
+    moverRainha(casas, &linha, &coluna);
+
+    printf("\n");
+
+    // reset posição
+    linha = 4;
+    coluna = 4;
+
+    // CAVALO
+    printf("Movimento do Cavalo:\n\n");
+    desenharTabuleiro(linha, coluna, 'C');
+    printf("\n");
+
+    moverCavalo(&linha, &coluna);
 
     return 0;
 }
