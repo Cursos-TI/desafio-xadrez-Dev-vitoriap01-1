@@ -3,21 +3,24 @@
 int main() {
 
     // Quantidade de movimentos do cavalo
-    int passosBaixo = 2;
+    int passosCima = 2;
     int passosEsquerda = 1;
 
     printf("Movimento do Cavalo:\n\n");
 
-    // Loop externo (FOR) -> movimento vertical (para baixo)
-    for(int i = 0; i < passosBaixo; i++) {
-        printf("Baixo\n");
-    }
+   for(int i = 0; i < passosCima; i++) {
+        printf("Acima\n");
 
-    // Loop interno (WHILE) -> movimento horizontal (para esquerda)
-    int j = 0;
-    while(j < passosEsquerda) {
-        printf("Esquerda\n");
-        j++;
+        if(i == passosCima - 1) {
+
+            int j = 0;
+
+            // Loop WHILE (interno)
+            while(j < passosEsquerda) {
+                printf("Esquerda\n");
+                j++;
+            }
+        }
     }
 
     return 0;
