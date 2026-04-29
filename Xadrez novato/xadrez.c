@@ -2,7 +2,7 @@
 
 #define TAM 8
 
-// ================= TABULEIRO =================
+// tabuleiro 
 void desenharTabuleiro(int linha, int coluna, char peca) {
     for(int i = 0; i < TAM; i++) {
         for(int j = 0; j < TAM; j++) {
@@ -16,7 +16,7 @@ void desenharTabuleiro(int linha, int coluna, char peca) {
     }
 }
 
-// ================= TORRE (recursivo) =================
+// torre
 // Move para a direita
 void moverTorre(int casas, int *linha, int *coluna) {
     if(casas <= 0) return;
@@ -31,8 +31,7 @@ void moverTorre(int casas, int *linha, int *coluna) {
     moverTorre(casas - 1, linha, coluna);
 }
 
-// ================= RAINHA (recursivo) =================
-// Move para a esquerda
+// rainha // Move para a esquerda
 void moverRainha(int casas, int *linha, int *coluna) {
     if(casas <= 0) return;
 
@@ -46,8 +45,7 @@ void moverRainha(int casas, int *linha, int *coluna) {
     moverRainha(casas - 1, linha, coluna);
 }
 
-// ================= BISPO (recursivo + loops aninhados) =================
-// Diagonal: cima + direita
+// bispo // Diagonal: cima + direita
 void moverBispo(int casas, int *linha, int *coluna) {
     if(casas <= 0) return;
 
@@ -74,8 +72,7 @@ void moverBispo(int casas, int *linha, int *coluna) {
     moverBispo(casas - 1, linha, coluna);
 }
 
-// ================= CAVALO (loops complexos) =================
-// Movimento: 2 cima + 1 direita
+// cavalo // Movimento: 2 cima + 1 direita
 void moverCavalo(int *linha, int *coluna) {
 
     int movVertical = 2;
@@ -83,7 +80,7 @@ void moverCavalo(int *linha, int *coluna) {
 
     for(int i = 0; i < movVertical; i++) {
 
-        if(i < 0) continue; // exemplo de uso
+        if(i < 0) continue; 
 
         if(*linha > 0) {
             (*linha)--;
@@ -110,7 +107,7 @@ void moverCavalo(int *linha, int *coluna) {
     }
 }
 
-// ================= MAIN =================
+// main
 int main() {
 
     int casas = 3;
@@ -160,7 +157,7 @@ int main() {
 
     // CAVALO
     printf("Movimento do Cavalo:\n\n");
-    desenharTabuleiro(linha, coluna, 'C');
+    desenharTabuleiro(linha, coluna, 'C');      
     printf("\n");
 
     moverCavalo(&linha, &coluna);
